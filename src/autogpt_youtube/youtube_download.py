@@ -1,4 +1,4 @@
-import youtube_dl
+import yt_dlp as yt
 from . import AutoGPTYouTube
 
 plugin = AutoGPTYouTube()
@@ -19,7 +19,7 @@ def download_youtube_video(url: str, output: str) -> str:
         "format": "bestvideo+bestaudio/best",
         "outtmpl": output,
     }
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+    with yt.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
     return f"Downloaded the video from {url} to {output}"
@@ -48,7 +48,7 @@ def download_youtube_audio(url: str, output: str) -> str:
             }
         ],
     }
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+    with yt.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
     return f"Downloaded the audio from {url} to {output}"

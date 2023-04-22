@@ -13,7 +13,7 @@ A Plugin for [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT) that a
   
    ![Download Zip](https://i.imgur.com/dvGqLMX.png)
 
-2. **Install the plugin's dependencies (if any):**
+2. **Install the plugin's dependencies:**
    Navigate to the plugin's folder in your terminal, and run the following command to install any required dependencies:
 
    ``` shell
@@ -35,7 +35,7 @@ A Plugin for [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT) that a
 
    If the plugin is not allowlisted, you will be warned before it's loaded.
 
-6. **Configure the plugin**
+6. **Configure the plugin:**
    Add the plugin's configuration to the `.env` file:
 
    ``` shell
