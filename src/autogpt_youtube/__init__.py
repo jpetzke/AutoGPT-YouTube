@@ -27,7 +27,7 @@ class AutoGPTYouTube(AutoGPTPluginTemplate):
         self.yt_api_key = os.environ.get("YOUTUBE_API_KEY")
         if self.yt_api_key is None:
             print(
-                "WARNING: The YouTube API key is not set. Please set the YOUTUBE_API_KEY=your_api_key environment variable."
+                "WARNING: The YouTube API key is not set, therefore API commands are disabled. Please set the YOUTUBE_API_KEY=your_api_key environment variable."
             )
         
 
@@ -50,11 +50,30 @@ class AutoGPTYouTube(AutoGPTPluginTemplate):
             PromptGenerator: The prompt generator.
         """
 
-        # If the YouTube API key is not set, return the prompt so that the plugin commands get skipped
+        # Import the necessary functions for non-API commands
+        from .youtube_download import download_youtube_video, download_youtube_audio
+
+        # Add the commands for autogpt to the prompt
+        prompt.add_command(
+            "download_youtube_video",
+            "Download a YouTube video",
+            {"url": "<video url>"},
+            download_youtube_video,
+        )
+        prompt.add_command(
+            "download_youtube_audio",
+            "Download the audio from a YouTube video",
+            {"url": "<video url>"},
+            download_youtube_audio,
+        )
+
+
+
+        # If the YouTube API key is not set, return the prompt so that the plugin commands that need an API key get skipped
         if self.yt_api_key is None:
             return prompt
 
-        # Import the necessary functions
+        # Import the necessary functions for API commands
         from .youtube_api import search_youtube
         
         # Add the commands for autogpt to the prompt

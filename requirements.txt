@@ -8,3 +8,4 @@ build
 twine
 requests
 auto_gpt_plugin_template
+youtube_dl
