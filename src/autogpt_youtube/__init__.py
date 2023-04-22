@@ -5,6 +5,8 @@ import os
 
 from abstract_singleton import AbstractSingleton, Singleton
 
+from auto_gpt_plugin_template import AutoGPTPluginTemplate
+
 PromptGenerator = TypeVar("PromptGenerator")
 
 
@@ -13,7 +15,7 @@ class Message(TypedDict):
     content: str
 
 
-class AutoGPTYouTube(AbstractSingleton, metaclass=Singleton):
+class AutoGPTYouTube(AutoGPTPluginTemplate):
     """
     This is a plugin for Auto-GPT which enables access to certain YouTube features.
     """
