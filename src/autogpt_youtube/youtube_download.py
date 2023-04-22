@@ -1,7 +1,7 @@
 import yt_dlp as yt
-from . import AutoGPTYouTube
+from . import AutoGPT_YouTube
 
-plugin = AutoGPTYouTube()
+plugin = AutoGPT_YouTube()
 
 def download_youtube_video(url: str, output: str) -> str:
     """Download a youtube video to mp4 format.

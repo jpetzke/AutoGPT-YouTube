@@ -12,7 +12,7 @@ class Message(TypedDict):
     content: str
 
 
-class AutoGPTYouTube(AutoGPTPluginTemplate):
+class AutoGPT_YouTube(AutoGPTPluginTemplate):
     """
     This is a plugin for Auto-GPT which enables access to certain YouTube features.
     """
