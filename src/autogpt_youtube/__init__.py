@@ -30,6 +30,8 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
                 "WARNING: The YouTube API key is not set, therefore API commands are disabled. Please set the YOUTUBE_API_KEY=your_api_key environment variable."
             )
         
+        self.workspace_path = "auto_gpt_workspace"
+        
 
     def can_handle_post_prompt(self) -> bool:
         """This method is called to check that the plugin can
@@ -50,10 +52,11 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
             PromptGenerator: The prompt generator.
         """
 
-        # Import the necessary functions for non-API commands
-        from .youtube_download import download_youtube_video, download_youtube_audio
+        # non-API commands
+        
 
-        # Add the commands for autogpt to the prompt
+        # youtube downloads
+        from .youtube_download import download_youtube_video, download_youtube_audio
         prompt.add_command(
             "download_youtube_video",
             "Download a YouTube video",
@@ -67,6 +70,21 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
             download_youtube_audio,
         )
 
+        # analyzing youtube videos and audios
+        from .analyze import audio_to_text, get_audio_duration
+        prompt.add_command(
+            "audio_to_text",
+            "Convert an audio file to text",
+            {"audio_file_path": "<audio file path>"},
+            audio_to_text
+        )
+        prompt.add_constraint("You cannot convert an audio file to text if the audio is longer than 5 minutes.")
+        prompt.add_command(
+            "get_audio_duration",
+            "Get the duration of an audio file in seconds",
+            {"audio_file_path": "<audio file path>"},
+            get_audio_duration
+        )
 
 
         # If the YouTube API key is not set, return the prompt so that the plugin commands that need an API key get skipped

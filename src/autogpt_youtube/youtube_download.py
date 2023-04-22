@@ -1,5 +1,6 @@
 import yt_dlp as yt
 from . import AutoGPT_YouTube
+import os
 
 plugin = AutoGPT_YouTube()
 
@@ -13,6 +14,11 @@ def download_youtube_video(url: str, output: str) -> str:
     Returns:
         str: status message
     """
+
+    # Switch to auto_gpt_workspace
+    os.chdir(plugin.workspace_path)
+
+    output = output.removesuffix(".mp4")
 
     # download the video
     ydl_opts = {
@@ -35,6 +41,11 @@ def download_youtube_audio(url: str, output: str) -> str:
     Returns:
         str: status message
     """
+
+    # Switch to auto_gpt_workspace
+    os.chdir(plugin.workspace_path)
+
+    output = output.removesuffix(".mp3")
 
     # download the video
     ydl_opts = {

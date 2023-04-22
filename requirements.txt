@@ -9,3 +9,5 @@ twine
 requests
 auto_gpt_plugin_template
 yt-dlp
+SpeechRecognition
+pydub

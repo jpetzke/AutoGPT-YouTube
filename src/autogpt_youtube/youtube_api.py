@@ -1,8 +1,8 @@
 
-from . import AutoGPT_YouTube
+from . import AutoGPTYouTube
 import requests
 
-plugin = AutoGPT_YouTube()
+plugin = AutoGPTYouTube()
 
 def search_youtube(query: str, max_results: int = 10) -> list:
     """Search for a query on youtube.

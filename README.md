@@ -5,6 +5,7 @@ A Plugin for [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT) that a
 - [x] Download YouTube videos
 - [x] Download YouTube audio
 - [x] Search YouTube
+- [x] Convert audio to text
 
 ### Plugin Installation Steps
 
