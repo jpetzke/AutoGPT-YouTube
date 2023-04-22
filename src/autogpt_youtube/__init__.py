@@ -57,13 +57,13 @@ class AutoGPTYouTube(AutoGPTPluginTemplate):
         prompt.add_command(
             "download_youtube_video",
             "Download a YouTube video",
-            {"url": "<video url>"},
+            {"url": "<video url>", "output": "<output path>"},
             download_youtube_video,
         )
         prompt.add_command(
             "download_youtube_audio",
-            "Download the audio from a YouTube video",
-            {"url": "<video url>"},
+            "Download a YouTube video's audio",
+            {"url": "<video url>", "output": "<output path>"},
             download_youtube_audio,
         )
 
@@ -80,7 +80,7 @@ class AutoGPTYouTube(AutoGPTPluginTemplate):
         prompt.add_command(
             "search_youtube",
             "Search YouTube for videos",
-            {"query": "<search query>"},
+            {"query": "<search query"},
             search_youtube
         )
 
