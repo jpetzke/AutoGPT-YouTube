@@ -1,14 +1,17 @@
 # Auto-GPT-Plugin-Template
-A starting point for developing your own external plug-in for Auto-GPT
+A Plugin for [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT) that adds YouTube support.
 
-# **If you want your plugin to live within the codebase, use the example in the [plugins repo](https://github.com/Significant-Gravitas/Auto-GPT-Plugins) instead**
+## Features
+- [x] Download YouTube videos
+- [x] Download YouTube audio
+- [x] Search YouTube
 
 ### Plugin Installation Steps
 
 1. **Clone or download the plugin repository:**
    Clone the plugin repository, or download the repository as a zip file.
   
-   ![Download Zip](https://raw.githubusercontent.com/BillSchumacher/Auto-GPT/master/plugin.png)
+   ![Download Zip](https://i.imgur.com/dvGqLMX.png)
 
 2. **Install the plugin's dependencies (if any):**
    Navigate to the plugin's folder in your terminal, and run the following command to install any required dependencies:
@@ -31,3 +34,14 @@ A starting point for developing your own external plug-in for Auto-GPT
    ```
 
    If the plugin is not allowlisted, you will be warned before it's loaded.
+
+6. **Configure the plugin**
+   Add the plugin's configuration to the `.env` file:
+
+   ``` shell
+   ################################################################################
+   ### YOUTUBE
+   ################################################################################
+
+   YOUTUBE_API_KEY=your-api-key
+   ```
