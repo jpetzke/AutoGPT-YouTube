@@ -1,38 +1,46 @@
 import speech_recognition as sr
 from pydub import AudioSegment
+from . import AutoGPT_YouTube
 
+import os
 
-def get_audio_duration(audio_file_path: str) -> str:
+plugin = AutoGPT_YouTube()
+
+def get_audio_duration(audio_file: str) -> str:
     """
     Get the duration of an audio file in seconds.
 
     Args:
-        audio_file_path (str): The path to the audio file (mp3 format)
+        audio_file (str): The path to the audio file (mp3 format)
 
     Returns:
         float: The duration of the audio file in seconds.
     """
 
-    audio_file = AudioSegment.from_file(audio_file_path, format="mp3")
-    return f"The duration of the file {audio_file_path} is {len(audio_file) / 1000} seconds."
+    audio_file = os.path.join(plugin.workspace_path, audio_file)
+
+    audio_file = AudioSegment.from_file(audio_file, format="mp3")
+    return f"The duration of the file {audio_file} is {len(audio_file) / 1000} seconds."
 
 
-def audio_to_text(audio_file_path: str) -> str:
+def audio_to_text(audio_file: str) -> str:
     """
     Convert an audio file to text using SpeechRecognition and Pydub.
 
     Args:
-        audio_file_path (str): The path to the audio file (mp3 format)
+        audio_file (str): The path to the audio file (mp3 format)
 
     Returns:
         str: The transcribed text.
     """
 
+    audio_file = os.path.join(plugin.workspace_path, audio_file)
+
 
     r = sr.Recognizer()
 
     # Load audio file using Pydub
-    audio_file = AudioSegment.from_file(audio_file_path, format="mp3")
+    audio_file = AudioSegment.from_file(audio_file, format="mp3")
     audio = audio_file.export(format="wav")
     print("Audio file loaded and converted to wav format.")
 

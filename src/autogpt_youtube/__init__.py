@@ -60,13 +60,13 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
         prompt.add_command(
             "download_youtube_video",
             "Download a YouTube video",
-            {"url": "<video url>", "output": "file name"},
+            {"url": "<video url>", "output_file": "file name"},
             download_youtube_video,
         )
         prompt.add_command(
             "download_youtube_audio",
             "Download a YouTube video's audio",
-            {"url": "<video url>", "output": "file name"},
+            {"url": "<video url>", "output_file": "file name"},
             download_youtube_audio,
         )
 
@@ -75,14 +75,14 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
         prompt.add_command(
             "audio_to_text",
             "Convert an audio file to text",
-            {"audio_file_path": "audio file name"},
+            {"audio_file": "audio file name"},
             audio_to_text
         )
         prompt.add_constraint("You cannot convert an audio file to text if the audio is longer than 5 minutes.")
         prompt.add_command(
             "get_audio_duration",
             "Get the duration of an audio file in seconds",
-            {"audio_file_path": "audio file name"},
+            {"audio_file": "audio file name"},
             get_audio_duration
         )
 
