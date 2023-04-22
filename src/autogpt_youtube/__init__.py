@@ -55,7 +55,7 @@ class AutoGPTYouTube(AutoGPTPluginTemplate):
             return prompt
 
         # Import the necessary functions
-        from .youtube import search_youtube
+        from .youtube_api import search_youtube
         
         # Add the commands for autogpt to the prompt
         prompt.add_command(
