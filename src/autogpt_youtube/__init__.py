@@ -23,8 +23,13 @@ class AutoGPTYouTube(AutoGPTPluginTemplate):
         self._version = "0.1.0"
         self._description = "This is a plugin for Auto-GPT which enables access to certain YouTube features."
 
-        # Get the YouTube API key
+        # Get the YouTube API key from the env. if it does not exist give a warning
         self.yt_api_key = os.environ.get("YOUTUBE_API_KEY")
+        if self.yt_api_key is None:
+            print(
+                "WARNING: The YouTube API key is not set. Please set the YOUTUBE_API_KEY=your_api_key environment variable."
+            )
+        
 
     def can_handle_post_prompt(self) -> bool:
         """This method is called to check that the plugin can
@@ -44,6 +49,10 @@ class AutoGPTYouTube(AutoGPTPluginTemplate):
         Returns:
             PromptGenerator: The prompt generator.
         """
+
+        # If the YouTube API key is not set, return the prompt so that the plugin commands get skipped
+        if self.yt_api_key is None:
+            return prompt
 
         # Import the necessary functions
         from .youtube import search_youtube
