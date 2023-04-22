@@ -20,7 +20,7 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
     def __init__(self):
         super().__init__()
         self._name = "AutoGPT-YouTube"
-        self._version = "0.1.0"
+        self._version = "0.2.0"
         self._description = "This is a plugin for Auto-GPT which enables access to certain YouTube features."
 
         # Get the YouTube API key from the env. if it does not exist give a warning
