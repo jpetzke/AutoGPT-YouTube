@@ -1,6 +1,7 @@
 """This is a template for Auto-GPT plugins."""
 import abc
 from typing import Any, Dict, List, Optional, Tuple, TypeVar, TypedDict
+import os
 
 from abstract_singleton import AbstractSingleton, Singleton
 
@@ -12,16 +13,54 @@ class Message(TypedDict):
     content: str
 
 
-class AutoGPTPluginTemplate(AbstractSingleton, metaclass=Singleton):
+class AutoGPTYouTube(AbstractSingleton, metaclass=Singleton):
     """
-    This is a template for Auto-GPT plugins.
+    This is a plugin for Auto-GPT which enables access to certain YouTube features.
     """
 
     def __init__(self):
         super().__init__()
-        self._name = "Auto-GPT-Plugin-Template"
+        self._name = "AutoGPT-YouTube"
         self._version = "0.1.0"
-        self._description = "This is a template for Auto-GPT plugins."
+        self._description = "This is a plugin for Auto-GPT which enables access to certain YouTube features."
+
+        # Get the YouTube API key
+        self.yt_api_key = os.environ.get("YOUTUBE_API_KEY")
+
+    @abc.abstractmethod
+    def can_handle_post_prompt(self) -> bool:
+        """This method is called to check that the plugin can
+        handle the post_prompt method.
+
+        Returns:
+            bool: True if the plugin can handle the post_prompt method."""
+        return True
+
+    @abc.abstractmethod
+    def post_prompt(self, prompt: PromptGenerator) -> PromptGenerator:
+        """This method is called just after the generate_prompt is called,
+            but actually before the prompt is generated.
+
+        Args:
+            prompt (PromptGenerator): The prompt generator.
+
+        Returns:
+            PromptGenerator: The prompt generator.
+        """
+
+        # Import the necessary functions
+        from .youtube import search_youtube
+        
+        # Add the commands for autogpt to the prompt
+        prompt.add_command(
+            "search_youtube",
+            "Search YouTube for videos",
+            {"query": "<search query>"},
+            search_youtube
+        )
+
+
+        return prompt
 
     @abc.abstractmethod
     def can_handle_on_response(self) -> bool:
@@ -35,28 +74,6 @@ class AutoGPTPluginTemplate(AbstractSingleton, metaclass=Singleton):
     @abc.abstractmethod
     def on_response(self, response: str, *args, **kwargs) -> str:
         """This method is called when a response is received from the model."""
-        pass
-
-    @abc.abstractmethod
-    def can_handle_post_prompt(self) -> bool:
-        """This method is called to check that the plugin can
-        handle the post_prompt method.
-
-        Returns:
-            bool: True if the plugin can handle the post_prompt method."""
-        return False
-
-    @abc.abstractmethod
-    def post_prompt(self, prompt: PromptGenerator) -> PromptGenerator:
-        """This method is called just after the generate_prompt is called,
-            but actually before the prompt is generated.
-
-        Args:
-            prompt (PromptGenerator): The prompt generator.
-
-        Returns:
-            PromptGenerator: The prompt generator.
-        """
         pass
 
     @abc.abstractmethod
