@@ -71,19 +71,12 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
         )
 
         # analyzing youtube videos and audios
-        from .analyze import audio_to_text, get_audio_duration
+        from .youtube_functions import get_youtube_transcript
         prompt.add_command(
-            "audio_to_text",
-            "Convert an audio file to text",
-            {"audio_file": "audio file name"},
-            audio_to_text
-        )
-        prompt.add_constraint("You cannot convert an audio file to text if the audio is longer than 5 minutes.")
-        prompt.add_command(
-            "get_audio_duration",
-            "Get the duration of an audio file in seconds",
-            {"audio_file": "audio file name"},
-            get_audio_duration
+            "get_youtube_transcript",
+            "Get the transcript of a YouTube video",
+            {"url": "<video url>"},
+            get_youtube_transcript
         )
 
 
