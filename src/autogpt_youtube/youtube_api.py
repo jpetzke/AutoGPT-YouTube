@@ -26,14 +26,16 @@ def search_youtube(query: str, max_results: int = 10) -> list:
     # convert the title, description and video url to a list of dictionaries
     results = []
     for result in search_results["items"]:
-        results.append(
-            {
-                "title": result["snippet"]["title"],
-                "description": result["snippet"]["description"],
-                "url": f"https://www.youtube.com/watch?v={result['id']['videoId']}",
-            }
-        )
+        try:
+            results.append(
+                {
+                    "title": result["snippet"]["title"],
+                    "channel": result["snippet"]["channelTitle"],
+                    "description": result["snippet"]["description"],
+                    "url": f"https://www.youtube.com/watch?v={result['id']['videoId']}",
+                }
+            )
+        except KeyError:
+            pass
 
     return results
-
-
