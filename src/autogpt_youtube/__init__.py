@@ -69,6 +69,9 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
             {"url": "<video url>", "output_file": "file name"},
             download_youtube_audio,
         )
+        prompt.add_performance_evaluation(
+            "Be careful when downloading videos, as they can be very large and take a long time to download. Only download videos that you need."
+        )
 
         # analyzing youtube videos and audios
         from .youtube_functions import get_youtube_transcript
