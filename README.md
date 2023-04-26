@@ -5,8 +5,8 @@ A Plugin for [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT) that a
 - [x] Download YouTube videos
 - [x] Download YouTube audio
 - [x] Search YouTube
-- [x] Download YouTube Subtitles
-- [ ] Split big video transcripts (subtitles) into multiple sections
+- [x] Download YouTube Subtitles (Transcription)
+- [x] Fetch comments of a YouTube video
 
 ### Plugin Installation Steps
 
@@ -32,7 +32,7 @@ A Plugin for [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT) that a
    Add the plugin's class name to the `ALLOWLISTED_PLUGINS` in the `.env` file to avoid being prompted with a warning when loading the plugin:
 
    ``` shell
-   ALLOWLISTED_PLUGINS=example-plugin1,example-plugin2,example-plugin3
+   ALLOWLISTED_PLUGINS=AutoGPT_YouTube,example-plugin1,example-plugin2
    ```
 
    If the plugin is not allowlisted, you will be warned before it's loaded.
