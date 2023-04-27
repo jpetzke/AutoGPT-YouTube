@@ -23,7 +23,7 @@ def get_youtube_transcript(url: str) -> str:
     # check if the transcript has more than 2500 tokens
     tokenized_text = nltk.tokenize.word_tokenize(transcript)
 
-    MAX_TOKENS = 2500
+    MAX_TOKENS = 1000
 
     if len(tokenized_text) <= MAX_TOKENS:
         return transcript
