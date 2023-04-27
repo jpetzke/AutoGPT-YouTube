@@ -88,7 +88,7 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
             return prompt
 
         # Import the necessary functions for API commands
-        from .youtube_api import search_youtube, get_youtube_comments
+        from .youtube_api import search_youtube, get_youtube_comments, get_youtube_video_info
         
         # Add the commands for autogpt to the prompt
         prompt.add_command(
@@ -105,6 +105,12 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
             get_youtube_comments
         )
 
+        prompt.add_command(
+            "get_youtube_video_info",
+            "Get information about a YouTube video",
+            {"url": "<video url>"},
+            get_youtube_video_info
+        )
 
         return prompt
 
