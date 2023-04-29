@@ -30,7 +30,9 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
                 "WARNING: The YouTube API key is not set, therefore API commands are disabled. Please set the YOUTUBE_API_KEY=your_api_key environment variable."
             )
         
-        self.workspace_path = "auto_gpt_workspace"
+        self.workspace_path = "autogpt\\auto_gpt_workspace"
+
+
         
 
     def can_handle_post_prompt(self) -> bool:
@@ -68,9 +70,6 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
             "Download a YouTube video's audio",
             {"url": "<video url>", "output_file": "file name"},
             download_youtube_audio,
-        )
-        prompt.add_performance_evaluation(
-            "Be careful when downloading videos, as they can be very large and take a long time to download. Only download videos that you need."
         )
 
         # analyzing youtube videos and audios
