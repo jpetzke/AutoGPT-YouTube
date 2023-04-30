@@ -1,8 +1,15 @@
+import os
+import google.auth
+from googleapiclient.discovery import build
 
-from . import AutoGPT_YouTube
-import requests
+from .functions import convert_ISO8601_to_seconds
+from .analyze import calculate_engagement_rate
 
-plugin = AutoGPT_YouTube()
+# Get the API key from environment variable
+API_KEY = os.environ.get("YOUTUBE_API_KEY")
+
+# Build the YouTube API client
+youtube = build("youtube", "v3", developerKey=API_KEY)
 
 def search_youtube(query: str, max_results: int = 10) -> list:
     """Search for a query on youtube.
@@ -14,25 +21,23 @@ def search_youtube(query: str, max_results: int = 10) -> list:
     Returns:
         list: The search results.
     """
-    
-    # perform the search
-    api_key = plugin.yt_api_key
+    # Call the search.list method to retrieve search results
+    search_response = youtube.search().list(
+        q=query,
+        type="video",
+        part="id,snippet",
+        maxResults=max_results
+    ).execute()
 
-    # get the search results
-    search_results = requests.get(
-        f"https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults={max_results}&q={query}&key={api_key}"
-    ).json()
-
-    # convert the title, description and video url to a list of dictionaries
+    # Convert the search results to a list of dictionaries
     results = []
-    for result in search_results["items"]:
+    for search_result in search_response.get("items", []):
         try:
             results.append(
                 {
-                    "title": result["snippet"]["title"],
-                    "channel": result["snippet"]["channelTitle"],
-                    "description": result["snippet"]["description"],
-                    "url": f"https://www.youtube.com/watch?v={result['id']['videoId']}",
+                    "title": search_result["snippet"]["title"],
+                    "channel": search_result["snippet"]["channelTitle"],
+                    "url": f"https://www.youtube.com/watch?v={search_result['id']['videoId']}"
                 }
             )
         except KeyError:
@@ -46,42 +51,108 @@ def get_youtube_comments(url: str, max_results: int = 15) -> list:
 
     Args:
         url (str): The URL of the YouTube video.
-        max_results (int, optional): The maximum number of results to return. Defaults to 10.
+        max_results (int, optional): The maximum number of results to return. Defaults to 15.
 
     Returns:
         list: The comments of the YouTube video.
     """
-    # get the video id
+    # Get the video ID from the video URL
     video_id = url.split("v=")[1]
 
-    # get the api key
-    api_key = plugin.yt_api_key
+    # Retrieve the comments for the video
+    comments = []
+    next_page_token = ''
+    next_page_counter = 0
 
-    # get the comments, max 100 (limited by API). These are not the top comments.
-    search_results = requests.get(
-        f"https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&maxResults=100&videoId={video_id}&key={api_key}"
-    ).json()
+    MAX_NEXT_PAGES = 100
 
-    # sort the comments by likes
-    search_results["items"].sort(key=lambda x: x["snippet"]["topLevelComment"]["snippet"]["likeCount"], reverse=True)
-    print(len(search_results["items"]))
+    while True:
+        next_page_counter += 1
+        if next_page_counter > MAX_NEXT_PAGES:
+            break
 
-    # get the top max_results comments
-    search_results["items"] = search_results["items"][:max_results]
+        request = youtube.commentThreads().list(
+            part='snippet',
+            videoId=video_id,
+            textFormat='plainText',
+            pageToken=next_page_token
+        )
+        response = request.execute()
+        
+        # Add the comments to the list
+        for item in response['items']:
+            comment = item['snippet']['topLevelComment']['snippet']
+            comments.append({
+                'author': comment['authorDisplayName'],
+                'date': comment['publishedAt'],
+                'comment': comment['textDisplay'],
+                'likes': comment['likeCount'],
+            })
+            
+        # Check if there are more comments to retrieve
+        if 'nextPageToken' in response:
+            next_page_token = response['nextPageToken']
+        else:
+            break
+    
+    # sort the list of comments
+    best_comments = sorted(comments, key=lambda k: k['likes'], reverse=True)
 
-    # convert the author, date, text and likes to a list of dictionaries
+    return best_comments[:max_results]
+
+
+
+def get_youtube_video_info(url: str):
+    """Get the information of a YouTube video.
+
+    Args:
+        url (str): The URL of the YouTube video.
+
+    Returns:
+        dict: The information of the YouTube video.
+    """
+    # Get the video ID from the video URL
+    video_id = url.split("v=")[1]
+
+    # Retrieve the comments for the video
+    video_info = youtube.videos().list(
+        part="snippet,contentDetails,statistics",
+        id=video_id
+    ).execute()
+
+    # Convert the search results to a list of dictionaries
     results = []
-    for result in search_results["items"]:
+    for video in video_info.get("items", []):
         try:
+
+            # convert video duration from ISO 8601 format to seconds
+            duration = convert_ISO8601_to_seconds(video["contentDetails"]["duration"])
+
+            # calculate the engagement rate
+            engagement_rate = calculate_engagement_rate(
+                likes=int(video["statistics"]["likeCount"]),
+                comments=int(video["statistics"]["commentCount"]),
+                views=int(video["statistics"]["viewCount"]),
+            )
+
+
             results.append(
                 {
-                    "author": result["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"],
-                    "date": result["snippet"]["topLevelComment"]["snippet"]["publishedAt"],
-                    "text": result["snippet"]["topLevelComment"]["snippet"]["textDisplay"],
-                    "likes": result["snippet"]["topLevelComment"]["snippet"]["likeCount"],
+                    "published_at": video["snippet"]["publishedAt"],
+                    "channel_id": video["snippet"]["channelId"],
+                    "title": video["snippet"]["title"],
+                    "description": video["snippet"]["description"],
+                    "thumbnail": video["snippet"]["thumbnails"]["high"]["url"],
+                    "channel_title": video["snippet"]["channelTitle"],
+                    "tags": video["snippet"]["tags"],
+                    "duration": duration,
+                    "view_count": video["statistics"]["viewCount"],
+                    "like_count": video["statistics"]["likeCount"],
+                    "comment_count": video["statistics"]["commentCount"],
+                    "engagement_rate": engagement_rate,
                 }
             )
         except KeyError:
             pass
 
-    return results
+    return results[0]

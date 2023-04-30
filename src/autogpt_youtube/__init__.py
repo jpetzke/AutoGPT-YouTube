@@ -20,7 +20,7 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
     def __init__(self):
         super().__init__()
         self._name = "AutoGPT-YouTube"
-        self._version = "0.2.0"
+        self._version = "0.3.0"
         self._description = "This is a plugin for Auto-GPT which enables access to certain YouTube features."
 
         # Get the YouTube API key from the env. if it does not exist give a warning
@@ -30,7 +30,9 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
                 "WARNING: The YouTube API key is not set, therefore API commands are disabled. Please set the YOUTUBE_API_KEY=your_api_key environment variable."
             )
         
-        self.workspace_path = "auto_gpt_workspace"
+        self.workspace_path = "autogpt\\auto_gpt_workspace"
+
+
         
 
     def can_handle_post_prompt(self) -> bool:
@@ -69,9 +71,6 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
             {"url": "<video url>", "output_file": "file name"},
             download_youtube_audio,
         )
-        prompt.add_performance_evaluation(
-            "Be careful when downloading videos, as they can be very large and take a long time to download. Only download videos that you need."
-        )
 
         # analyzing youtube videos and audios
         from .youtube_functions import get_youtube_transcript
@@ -88,7 +87,7 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
             return prompt
 
         # Import the necessary functions for API commands
-        from .youtube_api import search_youtube, get_youtube_comments
+        from .youtube_api import search_youtube, get_youtube_comments, get_youtube_video_info
         
         # Add the commands for autogpt to the prompt
         prompt.add_command(
@@ -105,6 +104,12 @@ class AutoGPT_YouTube(AutoGPTPluginTemplate):
             get_youtube_comments
         )
 
+        prompt.add_command(
+            "get_youtube_video_info",
+            "Get information about a YouTube video",
+            {"url": "<video url>"},
+            get_youtube_video_info
+        )
 
         return prompt
 

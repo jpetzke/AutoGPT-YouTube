@@ -52,3 +52,19 @@ def audio_to_text(audio_file: str) -> str:
 
     return text
 
+
+
+def calculate_engagement_rate(likes: int, comments: int, views: int) -> float:
+    """
+    Calculate the engagement rate of a YouTube video.
+
+    Args:
+        likes (int): The number of likes.
+        comments (int): The number of comments.
+        views (int): The number of views.
+
+    Returns:
+        float: The engagement rate.
+    """
+
+    return (likes + comments) / views
