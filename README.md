@@ -7,6 +7,7 @@ A Plugin for [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT) that a
 - [x] Search YouTube
 - [x] Download YouTube Subtitles (Transcription)
 - [x] Fetch comments of a YouTube video
+- [x] Get video information
 
 ### Plugin Installation Steps
 
