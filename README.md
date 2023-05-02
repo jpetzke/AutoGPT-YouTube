@@ -9,6 +9,11 @@ A Plugin for [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT) that a
 - [x] Fetch comments of a YouTube video
 - [x] Get video information
 
+## Requirements
+- Python
+- AutoGPT
+- ffmpeg
+
 ### Plugin Installation Steps
 
 1. **Clone or download the plugin repository:**
