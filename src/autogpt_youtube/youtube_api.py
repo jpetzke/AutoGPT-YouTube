@@ -154,5 +154,7 @@ def get_youtube_video_info(url: str):
             )
         except KeyError:
             pass
-
-    return results[0]
+    if results[0] == None:
+        return None
+    else:
+        return results[0]
